@@ -8,21 +8,22 @@ import lombok.Setter;
 import org.primefaces.event.TabCloseEvent;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Named
-@ApplicationScoped
+@SessionScoped
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TabbedView {
+public class TabbedView implements Serializable {
 
     private ElementDTO selected;
 

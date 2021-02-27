@@ -38,7 +38,28 @@
                     listener="#{tabbedView.onTabClose}"/>
             <p:tab title="#{elementDTO.name}"
                    closable="true">
-                <p:outputLabel value="#{elementDTO.content}"/>
+
+                <p:outputLabel value="#{areaTwoView.content(elementDTO)}"/>
+
+                <div class="card" style="padding-top: 15px">
+                    <h:form>
+                        <p:growl id="message" showDetail="true"/>
+                        <p:commandButton value="show" action="#{buttonPressView.addMessage}"
+                                         styleClass="p-mr-2"
+                                         icon="pi pi-check">
+                            <p:confirm header="Dialog window" message="#{buttonPressView.content(elementDTO)}"
+                                       icon="pi pi-exclamation-triangle"
+                            />
+                        </p:commandButton>
+                        <p:confirmDialog global="true"
+                                         showEffect="fade"
+                                         hideEffect="fade"
+                                         responsive="true"
+                                         width="500">
+                        </p:confirmDialog>
+                    </h:form>
+                </div>
+
             </p:tab>
         </p:tabView>
     </div>
