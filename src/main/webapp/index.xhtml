@@ -33,32 +33,34 @@
         <p:tabView value="#{tabbedView.elements}"
                    id="tabeElement"
                    var="elementDTO"
-                   activeIndex="#{tabbedView.indexLastElement()}">
+                   activeIndex="#{tabbedView.indexCurrentElement()}">
+            <p:ajax event="tabChange" update="@this" process="@this" listener="#{tabbedView.onTabChange}"/>
             <p:ajax event="tabClose"
                     listener="#{tabbedView.onTabClose}"/>
             <p:tab title="#{elementDTO.name}"
                    closable="true">
+                <p:outputLabel id="lable" value="#{dataTabView.applicationDataBean.selectedTab.content}"/>
 
-                <p:outputLabel value="#{areaTwoView.content(elementDTO)}"/>
-
-                <div class="card" style="padding-top: 15px">
-                    <h:form>
-                        <p:growl id="message" showDetail="true"/>
-                        <p:commandButton value="show" action="#{buttonPressView.addMessage}"
-                                         styleClass="p-mr-2"
-                                         icon="pi pi-check">
-                            <p:confirm header="Dialog window" message="#{buttonPressView.content(elementDTO)}"
-                                       icon="pi pi-exclamation-triangle"
-                            />
-                        </p:commandButton>
-                        <p:confirmDialog global="true"
-                                         showEffect="fade"
-                                         hideEffect="fade"
-                                         responsive="true"
-                                         width="500">
-                        </p:confirmDialog>
-                    </h:form>
+                <div class="card" style="padding-top: 20px">
+                    <p:commandButton value="show"
+                                     type="button"
+                                     process="@this"
+                                     icon="pi pi-external-link">
+                        <p:ajax event="click" listener="#{contentButtonView.openDialog()}" update="dialogData"/>
+                    </p:commandButton>
                 </div>
+                <p:dialog header="Dialog window"
+                          widgetVar="dlg"
+                          id="dialogData"
+                          minHeight="40"
+                          width="350"
+                          showEffect="fade"
+                          closable="true"
+                          modal="true"
+                          minimizable="true"
+                          maximizable="true">
+                    <p:outputLabel value="#{contentDialogView.applicationDataBean.selectedTab.content}"/>
+                </p:dialog>
 
             </p:tab>
         </p:tabView>

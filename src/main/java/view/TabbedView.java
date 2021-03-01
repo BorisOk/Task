@@ -5,12 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.event.Event;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,9 +28,13 @@ import java.util.Objects;
 @NoArgsConstructor
 public class TabbedView implements Serializable {
 
-    private ElementDTO selected;
+    @Inject
+    private ApplicationDataBean bean;
 
     private List<ElementDTO> elements;
+
+    @Inject
+    private Event<ElementDTO> selectedEvent;
 
     @PostConstruct
     public void init() {
@@ -35,7 +42,7 @@ public class TabbedView implements Serializable {
     }
 
     public void addElementToList(ElementDTO elementDTO) {
-        selected = elementDTO;
+        selectedEvent.fire(elementDTO);
         if (!elements.contains(elementDTO)) {
             elements.add(elementDTO);
         }
@@ -47,11 +54,14 @@ public class TabbedView implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public Integer indexLastElement() {
+    public void onTabChange(TabChangeEvent<ElementDTO> event) {
+        selectedEvent.fire(event.getData());
+    }
+
+    public Integer indexCurrentElement() {
         if (Objects.isNull(elements)) {
             return 0;
         }
-        return elements.indexOf(selected);
-
+        return elements.indexOf(bean.getSelectedTab());
     }
 }
